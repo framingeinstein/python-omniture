@@ -192,13 +192,15 @@ class Suite(Value):
 
     @property
     @utils.memoize
-    def segments(self):
+    def segments(self, query={}):
+        raw_query = {"accessLevel":"shared"}
+        raw_query.update(query)
         """ Return the list of valid segments for the current report suite """
         try:
             if self.account.cache:
-                data = self.request_cached('Segments', 'Get',{"accessLevel":"shared"})
+                data = self.request_cached('Segments', 'Get',raw_query)
             else:
-                data = self.request('Segments', 'Get',{"accessLevel":"shared"})
+                data = self.request('Segments', 'Get', raw_query)
             return Value.list('segments', data, self, 'name', 'id',)
         except reports.InvalidReportError:
             data = []
@@ -208,6 +210,23 @@ class Suite(Value):
     def report(self):
         """ Return a report to be run on this report suite """
         return Query(self)
+
+    def retrieve_segments(self, query={}):
+        raw_query = {"accessLevel":"shared"}
+        raw_query.update(query)
+        """ Return the list of valid segments for the current report suite """
+        try:
+            data = self.request('Segments', 'Get', raw_query)
+            return data
+        except reports.InvalidReportError:
+            return []
+    def save_segment(self, segment):
+        """ Return the list of valid segments for the current report suite """
+        try:
+            data = self.request('Segments', 'Save', segment)
+            return data
+        except reports.InvalidReportError:
+            return []
 
     def jsonReport(self,reportJSON):
         """Creates a report from JSON. Accepts either JSON or a string. Useful for deserializing requests"""
