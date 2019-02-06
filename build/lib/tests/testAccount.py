@@ -8,7 +8,7 @@ import os
 creds = {}
 creds['username'] = os.environ['OMNITURE_USERNAME']
 creds['secret'] = os.environ['OMNITURE_SECRET']
-test_report_suite = "omniture.api-gateway"
+test_report_suite = "royalcaribbeanprod"
 
 
 class AccountTest(unittest.TestCase):
